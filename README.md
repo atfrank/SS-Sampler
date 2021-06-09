@@ -1,5 +1,5 @@
 # SS-Sampler: A Simple Secondary Structure Sampling Tool
-
+* Sampling is done using a genetic algorithm and simple hydrogen-bonding and base-stacking fitness function
 # Installation:
 
 ```
