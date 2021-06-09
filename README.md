@@ -27,8 +27,9 @@ optional arguments:
                         GA population
 ```
 
-# Run SS-Sampler for the TAR RNA; 10 iterations; maximum number of stems set to 4
+# Run SS-Sampler
 ```shell
+# TAR RNA; 10 iterations; maximum number of stems set to 4
 python ga_sampler.py -s 'GGCAGAUCUGAGCCUGGGAGCUCUCUGCC'  -i 10 -n 4 
 ```
 
