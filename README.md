@@ -30,7 +30,7 @@ optional arguments:
 # Run SS-Sampler
 ```shell
 # TAR RNA; 10 iterations; maximum number of stems set to 4
-python ga_sampler.py -s 'GGCAGAUCUGAGCCUGGGAGCUCUCUGCC'  -i 10 -n 4 
+python ga_sampler.py -s 'GGCAGAUCUGAGCCUGGGAGCUCUCUGCC'  -i 10 -n 4 -o output/user
 ```
 
 # COMMERCIAL USE LICENSE:
