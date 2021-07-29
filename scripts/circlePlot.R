@@ -49,7 +49,7 @@ generate_circle_plot = function(ct, id, color = "purple", resid_offset = 1, colo
   return(p)
 }
 
-packages <- c("optparse", "ggplot2", "tidygraph")
+packages <- c("optparse", "ggplot2", "igraph", "ggraph", "tidygraph")
 suppressPackageStartupMessages(ipak(packages))
 
 option_list = list(
@@ -81,7 +81,7 @@ if(length(arguments$args) != 1) {
   ct = get_ct(ct_file_path)
   
   # make and print circlePlot
-  pdf(file = output_file_path, width = 5.027778, height = 4.763889)
+  pdf(file = output_file_path, width = 1.7*5.027778, height = 1.7*4.763889)
   p = generate_circle_plot(ct, id, color = "grey", gaps = 1, scale_using_cs = FALSE, resid_offset = 0)
   print(p)
   dev.off()
