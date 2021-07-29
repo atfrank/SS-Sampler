@@ -97,7 +97,7 @@ def main():
     parser.add_argument("-n","--n_stems", type=int, help="maximum number of stems", required = True)
     parser.add_argument("-i","--iterations", type=int, help="number of independent GA iterations", default = 200)
     parser.add_argument("-p","--populations", type=int, help="GA population", default = 30)
-    parser.add_argument("-o","--output_prefix", type=str, help="GA population", default = "output/user")
+    parser.add_argument("-o","--output_prefix", type=str, help="output prefix for CT files", default = "output/user")
     
 
     # parse command line
