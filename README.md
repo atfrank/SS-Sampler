@@ -6,11 +6,12 @@
 conda create -n ss-sampler python=3.7
 conda activate ss-sampler
 pip install geneticalgorithm matplotlib pandas more-itertools
+git clone https://github.com/atfrank/SS-Sampler.git
 ```
 
 # Usage:
 ```
-usage: ga_sampler.py [-h] -s SEQUENCE -n N_STEMS [-i ITERATIONS]
+usage: path/to/SS-Sampler/ga_sampler.py [-h] -s SEQUENCE -n N_STEMS [-i ITERATIONS]
                      [-p POPULATIONS] [-o OUTPUT_PREFIX]
 
 optional arguments:
