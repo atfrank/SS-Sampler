@@ -205,7 +205,8 @@ def setup_stems(bp_compatiable_matrix):
     crossing_matrix = generate_crossing_matrix(stems_s1, stems_s2, stem_indices)
     return(stems_s1, stems_s2, stem_indices, stem_compatibility_matrix, crossing_matrix)
 
-def get_stems(bp_compatiable_matrix):
+
+def get_stems(bp_compatiable_matrix, min_length = 1):
     """ identifies all stems in a fold from its base-pair compatibility matrix """
     stems_s1, stems_s2 = [],[]
     for i in range(0, bp_compatiable_matrix.shape[0]):
@@ -213,10 +214,15 @@ def get_stems(bp_compatiable_matrix):
         for j in js:
             if j > i:
                 s1, s2 = trace_stem(bp_compatiable_matrix, i, j)
-                stems_s1.append(s1)
-                stems_s2.append(s2)
+                # create trimmed version of stems
+                end = len(s1)
+                for k in range(end):
+                    if (len(s1[k:end]) >= min_length):
+                        stems_s1.append(s1[k:end])
+                        stems_s2.append(s2[k:end])
+                        stems_s1.append(s1[0:end-k])
+                        stems_s2.append(s2[0:end-k])                        
     return (stems_s1, stems_s2)
-
 
 def trace_stem(bp_compatiable_matrix, i, j):
     """ Identifies individal stems by identifying uninterrupt base-pairs connect to i,j. 

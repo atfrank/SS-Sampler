@@ -7,7 +7,7 @@ import argparse
 from PyRNA import *
 from geneticalgorithm.geneticalgorithm import geneticalgorithm as ga    
 
-def run_genetic_algorithm(sequence = 'GGCAGAUCUGAGCCUGGGAGCUCUCUGCC', N_stems = 4, iterations = 10, population_size = 10):
+def run_genetic_algorithm(sequence = 'GGCAGAUCUGAGCCUGGGAGCUCUCUGCC', N_stems = 4, iterations = 10, population_size = 10, ct_prefix = "user"):
     """ Function using a genetic algorithim to fold an RNA """
     # Intialize state
     initial_state = initialize_RNA(sequence, G_HB = -1.89, G_stack = -20.0)
@@ -63,33 +63,39 @@ def run_genetic_algorithm(sequence = 'GGCAGAUCUGAGCCUGGGAGCUCUCUGCC', N_stems = 
                  convergence_curve=False)
         _ = model.run()
         initial_state['assembled_stems'] = ga2stems(model)
+        name = "%s_raw_%s.ct"%(ct_prefix, i+1)
+        state2CT_file(initial_state, name)        
         models.append(copy.deepcopy(model))
         states.append(copy.deepcopy(initial_state))
+        
     return(models, states)
 
 
 def remove_duplicate_states(states):
-		bp_matrices = []
-		final_states = []
-		for i, state in enumerate(states):
-			bp_matrix = state2basepair_matrix(state)
-			bp_matrices.append(bp_matrix)
-			final_states.append(state)
-	
-			# filter out duplicate matrices
-			for pair in combinations(bp_matrices, 2):
-				if np.array_equal(pair[0], pair[1]):
-					_ = bp_matrices.pop()
-					_ = final_states.pop()
-		return (bp_matrices, final_states)
+        bp_matrices = []
+        final_states = []
+        for i, state in enumerate(states):
+            bp_matrix = state2basepair_matrix(state)
+            bp_matrices.append(bp_matrix)
+            final_states.append(state)
+    
+            # filter out duplicate matrices
+            for pair in combinations(bp_matrices, 2):
+                if np.array_equal(pair[0], pair[1]):
+                    _ = bp_matrices.pop()
+                    _ = final_states.pop()
+        return (bp_matrices, final_states)
 
-def states2CT_files(states, ct_prefix = "user"):		
-		for i, state in enumerate(states):
-			CT = state2CT(state)
-			name = "%s_%s.ct"%(ct_prefix, i+1)
-			energy = get_free_energy_from_stems(state['assembled_stems'], state['stem_energies'])    
-			writeCT(CT, name, energy) 
-			           
+def states2CT_files(states, ct_prefix = "user"):        
+        for i, state in enumerate(states):          
+            name = "%s_%s.ct"%(ct_prefix, i+1)
+            state2CT_file(state, name)
+
+def state2CT_file(state, name = "user.ct"):     
+        CT = state2CT(state)
+        energy = get_free_energy_from_stems(state['assembled_stems'], state['stem_energies'])    
+        writeCT(CT, name, energy) 
+                       
 def main():
     # configure parser
     parser = argparse.ArgumentParser()
@@ -99,12 +105,11 @@ def main():
     parser.add_argument("-p","--populations", type=int, help="GA population", default = 30)
     parser.add_argument("-o","--output_prefix", type=str, help="output prefix for CT files", default = "output/user")
     
-
     # parse command line
     a = parser.parse_args()  
 
     # run     
-    models, states = run_genetic_algorithm(sequence = a.sequence, N_stems = a.n_stems,  iterations = a.iterations,  population_size = a.populations)
+    models, states = run_genetic_algorithm(sequence = a.sequence, N_stems = a.n_stems,  iterations = a.iterations,  population_size = a.populations, ct_prefix = a.output_prefix)
    
     # remove duplicates
     bpmatrices, states = remove_duplicate_states(states)
